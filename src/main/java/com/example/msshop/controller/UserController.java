@@ -23,9 +23,8 @@ import com.example.msshop.service.UserService;
 
 
 
-
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -33,14 +32,26 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody User user) {
+        User currentUser = userService.login(user.getUsername(), user.getPassword());
+        if (currentUser == null) {
+            log.error("Error al iniciar sesión con el usuario {}", user.getUsername());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Error al iniciar sesión con el usuario " + user.getUsername()));
+        }
+        return ResponseEntity.ok(user);
+    }
+    
+
+    @GetMapping("/users")
     public List<User> getAllUsers() {
         log.info("GET /users");
         log.info("Retornando todos los usuarios");
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("users/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isEmpty()) {
@@ -50,7 +61,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<Object> createUser(@Validated @RequestBody User user) {
         User createdUser = userService.createUser(user);
         if (createdUser == null) {
@@ -61,13 +72,23 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
     
-    @PutMapping("/{id}")
+    @PutMapping("users/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        User currentUser = userService.getUserById(id).get();
+        if (currentUser == null) {
+            log.error("No se encontró el usuario con ID {}", id);
+            return null;
+        }
         return userService.updateUser(id, user);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("users/{id}")
     public void deleteStudent(@PathVariable Long id){
+        User currentUser = userService.getUserById(id).get();
+        if (currentUser == null) {
+            log.error("No se encontró el usuario con ID {}", id);
+            return;
+        }
         userService.deleteUser(id);
     }
 
