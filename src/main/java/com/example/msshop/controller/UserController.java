@@ -1,4 +1,4 @@
-package com.nrcg.ms_shop_s2.controller;
+package com.example.msshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.nrcg.ms_shop_s2.model.User;
-import com.nrcg.ms_shop_s2.service.UserService;
+import com.example.msshop.model.User;
+import com.example.msshop.service.UserService;
 
 
 

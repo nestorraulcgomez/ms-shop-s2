@@ -1,4 +1,4 @@
-package com.nrcg.ms_shop_s2.model;
+package com.example.msshop.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
