@@ -1,10 +1,10 @@
 package com.example.msshop.service;
 
 import java.util.Optional;
+import java.util.List;
 
 import com.example.msshop.model.User;
 
-import java.util.List;
 
 public interface UserService {
     User login(String username, String password);
